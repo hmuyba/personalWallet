@@ -1,0 +1,24 @@
+<div class="balance-summary">
+  <h2>Resumen del Presupuesto</h2>
+
+  <div class="summary-cards" *ngIf="summary$ | async as summary">
+    <div class="card income">
+      <h3>Ingresos Totales</h3>
+      <p class="amount">${{ summary.totalIncome | number : "1.2-2" }}</p>
+    </div>
+
+    <div class="card expenses">
+      <h3>Gastos Totales</h3>
+      <p class="amount">${{ summary.totalExpenses | number : "1.2-2" }}</p>
+    </div>
+
+    <div
+      class="card balance"
+      [class.positive]="summary.balance >= 0"
+      [class.negative]="summary.balance < 0"
+    >
+      <h3>Balance</h3>
+      <p class="amount">${{ summary.balance | number : "1.2-2" }}</p>
+    </div>
+  </div>
+</div>

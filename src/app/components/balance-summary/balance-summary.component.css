@@ -1,0 +1,50 @@
+.balance-summary {
+  margin-bottom: 20px;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card.income {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.card.expenses {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+.card.balance.positive {
+  background-color: #d1ecf1;
+  border: 1px solid #bee5eb;
+}
+
+.card.balance.negative {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+.card h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.amount {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}

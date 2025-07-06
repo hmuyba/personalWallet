@@ -25,8 +25,7 @@
               }
             ],
             "styles": ["src/styles.css"],
-            "scripts": [],
-            "baseHref": "/personalWallet/"
+            "scripts": []
           },
           "configurations": {
             "production": {

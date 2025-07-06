@@ -29,13 +29,13 @@ jobs:
         run: npm ci
 
       - name: Build Angular app
-        run: npm run build -- --configuration=production --base-href=/personal-wallet/
+        run: npm run build -- --configuration=production --base-href=/personalWallet/
 
       # Upload build artifacts for GitHub Pages
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/personal-wallet
+          path: ./dist/personalWallet
 
       # OPCIONAL: Docker push si lo sigues usando
       - name: Login to Docker Hub

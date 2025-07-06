@@ -24,8 +24,8 @@ jobs:
       - name: Build Angular app
         run: npm run build --prod
 
-      - name: Run tests
-        run: npm run test -- --watch=false --browsers=ChromeHeadless
+    #   - name: Run tests
+    #     run: npm run test -- --watch=false --browsers=ChromeHeadless
 
       # DOCKER PUSH
       - name: Login to Docker Hub

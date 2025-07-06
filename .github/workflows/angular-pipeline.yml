@@ -47,4 +47,4 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: hmuyba99/personalWallet:latest
+          tags: hmuyba99/personal-wallet:latest

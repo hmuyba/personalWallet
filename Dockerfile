@@ -12,14 +12,14 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the Angular app
-RUN npm run build --prod
+# Build the Angular app (Angular 19 syntax)
+RUN npm run build -- --configuration=production
 
 # Stage 2: Serve the app with nginx
 FROM nginx:alpine
 
-# Copy built app to nginx
-COPY --from=build /app/dist/* /usr/share/nginx/html/
+# Copy built app to nginx (ruta correcta para Angular 19)
+COPY --from=build /app/dist/personalWallet/browser /usr/share/nginx/html/
 
 # Copy nginx configuration (optional)
 # COPY nginx.conf /etc/nginx/nginx.conf

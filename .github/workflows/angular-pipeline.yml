@@ -30,15 +30,15 @@ jobs:
       - name: Build Angular app
         run: npm run build -- --configuration=production --base-href=/personalWallet/
 
-      # Crear archivo .nojekyll para evitar problemas con archivos que empiezan con _
+      # Crear archivo .nojekyll en la carpeta browser
       - name: Create .nojekyll file
-        run: touch ./dist/personalWallet/.nojekyll
+        run: touch ./dist/personalWallet/browser/.nojekyll
 
-      # Upload build artifacts for GitHub Pages
+      # Upload build artifacts desde la carpeta browser
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/personalWallet
+          path: ./dist/personalWallet/browser
 
       # OPCIONAL: Docker push si lo sigues usando
       - name: Login to Docker Hub

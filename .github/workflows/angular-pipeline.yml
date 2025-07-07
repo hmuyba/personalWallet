@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: ["main"]
 
-# Add permissions for GitHub Pages deployment
 permissions:
   contents: read
   pages: write
@@ -30,6 +29,10 @@ jobs:
 
       - name: Build Angular app
         run: npm run build -- --configuration=production --base-href=/personalWallet/
+
+      # Crear archivo .nojekyll para evitar problemas con archivos que empiezan con _
+      - name: Create .nojekyll file
+        run: touch ./dist/personalWallet/.nojekyll
 
       # Upload build artifacts for GitHub Pages
       - name: Upload GitHub Pages artifact
@@ -59,7 +62,6 @@ jobs:
           push: true
           tags: hmuyba99/personal-wallet:latest
 
-  # Deploy to GitHub Pages
   deploy:
     needs: build
     runs-on: ubuntu-latest

@@ -1,67 +1,81 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+import { map } from 'rxjs/operators';
 import { Transaction, BudgetSummary } from '../models/transaction.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BudgetService {
-  private readonly STORAGE_KEY = 'budget-transactions';
-  private transactionsSubject = new BehaviorSubject<Transaction[]>([]);
-  public transactions$ = this.transactionsSubject.asObservable();
+  private storageKey = 'budget-transactions';
+  private transactionsSubject = new BehaviorSubject<Transaction[]>(
+    this.loadFromStorage()
+  );
+  private nextId = this.getNextId();
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.loadTransactions();
-  }
+  transactions$ = this.transactionsSubject.asObservable();
 
-  private loadTransactions(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
-      if (stored) {
-        const transactions = JSON.parse(stored);
-        this.transactionsSubject.next(transactions);
-      }
-    } else {
-      this.transactionsSubject.next([]);
-    }
-  }
-
-  private saveTransactions(transactions: Transaction[]): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(transactions));
-    }
-    this.transactionsSubject.next(transactions);
-  }
+  constructor() {}
 
   addTransaction(transaction: Omit<Transaction, 'id'>): void {
-    const transactions = this.transactionsSubject.value;
     const newTransaction: Transaction = {
       ...transaction,
-      id: Date.now() + Math.random(),
+      id: this.nextId++,
     };
-    const updatedTransactions = [...transactions, newTransaction];
-    this.saveTransactions(updatedTransactions);
+
+    const currentTransactions = this.transactionsSubject.value;
+    const updatedTransactions = [...currentTransactions, newTransaction];
+
+    this.transactionsSubject.next(updatedTransactions);
+    this.saveToStorage(updatedTransactions);
   }
 
   deleteTransaction(id: number): void {
-    const transactions = this.transactionsSubject.value;
-    const updatedTransactions = transactions.filter((t) => t.id !== id);
-    this.saveTransactions(updatedTransactions);
+    const currentTransactions = this.transactionsSubject.value;
+    const updatedTransactions = currentTransactions.filter((t) => t.id !== id);
+
+    this.transactionsSubject.next(updatedTransactions);
+    this.saveToStorage(updatedTransactions);
   }
 
   getSummary(): Observable<BudgetSummary> {
-    return new Observable((observer) => {
-      this.transactions$.subscribe((transactions) => {
+    return this.transactions$.pipe(
+      map((transactions) => {
         const totalIncome = transactions
           .filter((t) => t.type === 'income')
           .reduce((sum, t) => sum + t.amount, 0);
+
         const totalExpenses = transactions
           .filter((t) => t.type === 'expense')
           .reduce((sum, t) => sum + t.amount, 0);
-        const balance = totalIncome - totalExpenses;
-        observer.next({ totalIncome, totalExpenses, balance });
-      });
-    });
+
+        return {
+          totalIncome,
+          totalExpenses,
+          balance: totalIncome - totalExpenses,
+        };
+      })
+    );
+  }
+
+  private loadFromStorage(): Transaction[] {
+    const data = localStorage.getItem(this.storageKey);
+    if (!data) return [];
+
+    return JSON.parse(data).map((t: any) => ({
+      ...t,
+      date: new Date(t.date),
+    }));
+  }
+
+  private saveToStorage(transactions: Transaction[]): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(transactions));
+  }
+
+  private getNextId(): number {
+    const transactions = this.loadFromStorage();
+    return transactions.length > 0
+      ? Math.max(...transactions.map((t) => t.id)) + 1
+      : 1;
   }
 }

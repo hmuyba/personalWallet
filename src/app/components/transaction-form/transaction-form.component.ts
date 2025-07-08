@@ -37,6 +37,11 @@ export class TransactionFormComponent {
       category: ['', Validators.required],
       date: [new Date().toISOString().split('T')[0], Validators.required],
     });
+
+    // Limpiar categoría cuando cambie el tipo
+    this.transactionForm.get('type')?.valueChanges.subscribe(() => {
+      this.transactionForm.get('category')?.setValue('');
+    });
   }
 
   onSubmit(): void {

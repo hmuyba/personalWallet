@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
@@ -14,10 +14,17 @@ import { BalanceSummaryComponent } from './components/balance-summary/balance-su
     BalanceSummaryComponent,
   ],
   template: `
-    <div class="app-container">
+    <div class="app-container" [class.dark-mode]="isDarkMode">
       <header class="app-header">
-        <h1>{{ title }}</h1>
-        <p>Controla tus finanzas personales</p>
+        <div class="header-content">
+          <div>
+            <h1>{{ title }}</h1>
+            <p>Controla tus finanzas personales</p>
+          </div>
+          <button class="theme-toggle" (click)="toggleTheme()">
+            {{ isDarkMode ? '☀️' : '🌙' }}
+          </button>
+        </div>
       </header>
 
       <main class="app-main">
@@ -31,6 +38,17 @@ import { BalanceSummaryComponent } from './components/balance-summary/balance-su
   `,
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Calculadora de Presupuesto Personal';
+  isDarkMode = false;
+
+  ngOnInit(): void {
+    const savedTheme = localStorage.getItem('theme');
+    this.isDarkMode = savedTheme === 'dark';
+  }
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+  }
 }

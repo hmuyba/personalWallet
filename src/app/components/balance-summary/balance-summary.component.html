@@ -3,12 +3,12 @@
 
   <div class="summary-cards" *ngIf="summary$ | async as summary">
     <div class="card income">
-      <h3>Ingresos Totales</h3>
+      <h3>💰 Ingresos Totales</h3>
       <p class="amount">${{ summary.totalIncome | number : "1.2-2" }}</p>
     </div>
 
     <div class="card expenses">
-      <h3>Gastos Totales</h3>
+      <h3>💸 Gastos Totales</h3>
       <p class="amount">${{ summary.totalExpenses | number : "1.2-2" }}</p>
     </div>
 
@@ -17,7 +17,7 @@
       [class.positive]="summary.balance >= 0"
       [class.negative]="summary.balance < 0"
     >
-      <h3>Balance</h3>
+      <h3>⚖️ Balance</h3>
       <p class="amount">${{ summary.balance | number : "1.2-2" }}</p>
     </div>
   </div>

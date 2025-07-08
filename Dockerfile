@@ -21,11 +21,9 @@ FROM nginx:alpine
 # Copy built app to nginx (ruta correcta para Angular 19)
 COPY --from=build /app/dist/personalWallet/browser /usr/share/nginx/html/
 
-# Copy nginx configuration (optional)
-# COPY nginx.conf /etc/nginx/nginx.conf
-
 # Expose port 80
 EXPOSE 80
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
+

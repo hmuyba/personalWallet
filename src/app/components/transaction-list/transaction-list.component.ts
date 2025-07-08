@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { BudgetService } from '../../services/budget.service';
 import { Transaction } from '../../models/transaction.model';
 
@@ -13,11 +13,26 @@ import { Transaction } from '../../models/transaction.model';
 })
 export class TransactionListComponent implements OnInit {
   transactions$!: Observable<Transaction[]>;
+  currentFilter = 'all';
 
   constructor(private budgetService: BudgetService) {}
 
   ngOnInit(): void {
-    this.transactions$ = this.budgetService.transactions$;
+    this.transactions$ = this.budgetService.transactions$.pipe(
+      map((transactions) => this.filterTransactions(transactions))
+    );
+  }
+
+  setFilter(filter: string): void {
+    this.currentFilter = filter;
+    this.transactions$ = this.budgetService.transactions$.pipe(
+      map((transactions) => this.filterTransactions(transactions))
+    );
+  }
+
+  private filterTransactions(transactions: Transaction[]): Transaction[] {
+    if (this.currentFilter === 'all') return transactions;
+    return transactions.filter((t) => t.type === this.currentFilter);
   }
 
   deleteTransaction(id: number): void {

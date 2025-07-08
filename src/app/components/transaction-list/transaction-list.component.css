@@ -12,6 +12,29 @@
   border-bottom: 1px solid #dee2e6;
 }
 
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  padding: 15px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 1px solid #007bff;
+  background: white;
+  color: #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter-btn.active {
+  background: #007bff;
+  color: white;
+}
+
 .no-transactions {
   padding: 40px 20px;
   text-align: center;
